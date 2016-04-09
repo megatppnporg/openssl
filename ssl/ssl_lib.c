@@ -590,6 +590,7 @@ SSL *SSL_new(SSL_CTX *ctx)
 
     SSL_CTX_up_ref(ctx);
     s->ctx = ctx;
+    s->tlsext_max_fragment_length = ctx->tlsext_max_fragment_length;
     s->tlsext_debug_cb = 0;
     s->tlsext_debug_arg = NULL;
     s->tlsext_ticket_expected = 0;

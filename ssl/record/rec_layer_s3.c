@@ -333,7 +333,7 @@ int ssl3_write_bytes(SSL *s, int type, const void *buf_, int len)
     int tot;
     unsigned int n, split_send_fragment, maxpipes;
 #if !defined(OPENSSL_NO_MULTIBLOCK) && EVP_CIPH_FLAG_TLS1_1_MULTIBLOCK
-    unsigned int max_send_fragment, nw;
+    unsigned int max_send_fragment = 0, nw;
     unsigned int u_len = (unsigned int)len;
 #endif
     SSL3_BUFFER *wb = &s->rlayer.wbuf[0];
@@ -386,6 +386,14 @@ int ssl3_write_bytes(SSL *s, int type, const void *buf_, int len)
         tot += i;               /* this might be last fragment */
     }
 #if !defined(OPENSSL_NO_MULTIBLOCK) && EVP_CIPH_FLAG_TLS1_1_MULTIBLOCK
+    if (type == SSL3_RT_APPLICATION_DATA) {
+        max_send_fragment = s->max_send_fragment;
+
+        if (SSL_USE_MAX_FRAGMENT_LENGTH_EXT(s))
+            if (max_send_fragment > SSL_GET_MAX_FRAGMENT_LENGTH(s))
+                max_send_fragment = SSL_GET_MAX_FRAGMENT_LENGTH(s);
+    }
+
     /*
      * Depending on platform multi-block can deliver several *times*
      * better performance. Downside is that it has to allocate
@@ -393,7 +401,7 @@ int ssl3_write_bytes(SSL *s, int type, const void *buf_, int len)
      * compromise is considered worthy.
      */
     if (type == SSL3_RT_APPLICATION_DATA &&
-        u_len >= 4 * (max_send_fragment = s->max_send_fragment) &&
+        u_len >= (4 * max_send_fragment) &&
         s->compress == NULL && s->msg_callback == NULL &&
         !SSL_WRITE_ETM(s) && SSL_USE_EXPLICIT_IV(s) &&
         EVP_CIPHER_flags(EVP_CIPHER_CTX_cipher(s->enc_write_ctx)) &
@@ -579,6 +587,14 @@ int ssl3_write_bytes(SSL *s, int type, const void *buf_, int len)
                 pipelens[j] = tmppipelen;
                 if (j < remain)
                     pipelens[j]++;
+            }
+        }
+
+        if (SSL_USE_MAX_FRAGMENT_LENGTH_EXT(s)) {
+            unsigned int max_fragment_len =  SSL_GET_MAX_FRAGMENT_LENGTH(s);
+            for (j = 0; j < numpipes; j++) {
+                if ( pipelens[j] > max_fragment_len )
+                    pipelens[j] = max_fragment_len;
             }
         }
 

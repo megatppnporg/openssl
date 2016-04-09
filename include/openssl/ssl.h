@@ -1142,6 +1142,8 @@ DECLARE_PEM_rw(SSL_SESSION, SSL_SESSION)
 # define SSL_CTRL_GET_TLSEXT_STATUS_REQ_TYPE     127
 # define SSL_CTRL_GET_TLSEXT_STATUS_REQ_CB       128
 # define SSL_CTRL_GET_TLSEXT_STATUS_REQ_CB_ARG   129
+# define SSL_CTRL_SET_TLSEXT_MAX_FRAGMENT_LENGTH        130
+# define SSL_CTRL_GET_TLSEXT_MAX_FRAGMENT_LENGTH        131
 # define SSL_CERT_SET_FIRST                      1
 # define SSL_CERT_SET_NEXT                       2
 # define SSL_CERT_SET_SERVER                     3
@@ -2437,6 +2439,7 @@ int ERR_load_SSL_strings(void);
 # define SSL_R_SRTP_UNKNOWN_PROTECTION_PROFILE            364
 # define SSL_R_SSL3_EXT_INVALID_SERVERNAME                319
 # define SSL_R_SSL3_EXT_INVALID_SERVERNAME_TYPE           320
+# define SSL_R_SSL3_EXT_INVALID_MAX_FRAGMENT_LENGTH       393
 # define SSL_R_SSL3_SESSION_ID_TOO_LONG                   300
 # define SSL_R_SSLV3_ALERT_BAD_CERTIFICATE                1042
 # define SSL_R_SSLV3_ALERT_BAD_RECORD_MAC                 1020

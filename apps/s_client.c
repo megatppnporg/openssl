@@ -548,6 +548,7 @@ typedef enum OPTION_choice {
     OPT_SERVERINFO, OPT_STARTTLS, OPT_SERVERNAME,
     OPT_USE_SRTP, OPT_KEYMATEXPORT, OPT_KEYMATEXPORTLEN, OPT_SMTPHOST,
     OPT_ASYNC, OPT_SPLIT_SEND_FRAG, OPT_MAX_PIPELINES, OPT_READ_BUF,
+    OPT_MAXFRAGLEN,
     OPT_V_ENUM,
     OPT_X_ENUM,
     OPT_S_ENUM,
@@ -618,6 +619,8 @@ OPTIONS s_client_options[] = {
      "Export keying material using label"},
     {"keymatexportlen", OPT_KEYMATEXPORTLEN, 'p',
      "Export len bytes of keying material (default 20)"},
+    {"maxfraglen", OPT_MAXFRAGLEN, 'p',
+     "Enable Maximum Fragment Length Negotiation (len values: 512, 1024, 2048 and 4096)"},
     {"fallback_scsv", OPT_FALLBACKSCSV, '-', "Send the fallback SCSV"},
     {"name", OPT_SMTPHOST, 's', "Hostname to use for \"-starttls smtp\""},
     {"CRL", OPT_CRL, '<', "CRL file to use"},
@@ -855,6 +858,7 @@ int s_client_main(int argc, char **argv)
     unsigned int max_pipelines = 0;
     enum { use_inet, use_unix, use_unknown } connect_type = use_unknown;
     int count4or6 = 0;
+    char maxfraglen = 0;
     int c_nbio = 0, c_msg = 0, c_ign_eof = 0, c_brief = 0;
     int c_tlsextdebug = 0;
 #ifndef OPENSSL_NO_OCSP
@@ -1306,6 +1310,25 @@ int s_client_main(int argc, char **argv)
         case OPT_KEYMATEXPORTLEN:
             keymatexportlen = atoi(opt_arg());
             break;
+        case OPT_MAXFRAGLEN:
+            len = atoi(opt_arg());
+            switch (len) {
+            case 512:
+                maxfraglen = TLSEXT_max_fragment_length_2_TO_9;
+                break;
+            case 1024:
+                maxfraglen = TLSEXT_max_fragment_length_2_TO_10;
+                break;
+            case 2048:
+                maxfraglen = TLSEXT_max_fragment_length_2_TO_11;
+                break;
+            case 4096:
+                maxfraglen = TLSEXT_max_fragment_length_2_TO_12;
+                break;
+            default:
+                goto opthelp;
+            }
+            break;
         case OPT_ASYNC:
             async = 1;
             break;
@@ -1661,6 +1684,9 @@ int s_client_main(int argc, char **argv)
             goto end;
         }
     }
+
+   if (maxfraglen)
+        SSL_CTX_set_tlsext_max_fragment_length(ctx, maxfraglen);
 
     con = SSL_new(ctx);
     if (sess_in) {
