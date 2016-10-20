@@ -1002,7 +1002,13 @@ unsigned char *ssl_add_clienthello_tlsext(SSL *s, unsigned char *buf,
     if (s->tlsext_max_fragment_length >= TLSEXT_max_fragment_length_2_TO_9
         && s->tlsext_max_fragment_length <= TLSEXT_max_fragment_length_2_TO_12)
     {
-        if ((limit - ret - 5) < 0) return NULL;
+        /*-
+         * check for enough space.
+         * 4 bytes for the Max Fragment Length ext type and extension length
+         * 1 byte for the mode
+         */
+        if (ret >= limit || limit - ret < 5)
+            return NULL;
 
         s2n(TLSEXT_TYPE_max_fragment_length, ret);
         s2n(1, ret);
@@ -1478,7 +1484,13 @@ unsigned char *ssl_add_serverhello_tlsext(SSL *s, unsigned char *buf,
         return NULL;            /* this really never occurs, but ... */
 
     if (SSL_USE_MAX_FRAGMENT_LENGTH_EXT(s)) {
-        if ((limit - ret - 5) < 0) return NULL;
+        /*-
+         * check for enough space.
+         * 4 bytes for the Max Fragment Length ext type and extension length
+         * 1 byte for the mode
+         */
+        if (ret >= limit || limit - ret < 5)
+            return NULL;
 
         s2n(TLSEXT_TYPE_max_fragment_length, ret);
         s2n(1, ret);
