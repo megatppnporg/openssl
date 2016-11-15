@@ -129,6 +129,11 @@
      issues.
      [Matt Caswell]
 
+  *) Discard support of some obsolete X509.v3 Netscape (NS) extensions.
+     Except nsComment who is still present in openssl.cfg files and co.
+     See the list of these old extensions in doc/man5/x509v3_config.pod 
+     [FDaSilvaYY]
+
   *) Add the ASN.1 types INT32, UINT32, INT64, UINT64 and variants prefixed
      with Z.  These are meant to replace LONG and ZLONG and to be size safe.
      The use of LONG and ZLONG is discouraged and scheduled for deprecation
