@@ -36,6 +36,7 @@ int ERR_load_X509V3_strings(void);
 # define X509V3_F_I2S_ASN1_ENUMERATED                     121
 # define X509V3_F_I2S_ASN1_IA5STRING                      149
 # define X509V3_F_I2S_ASN1_INTEGER                        120
+# define X509V3_F_I2S_V3_NS_COMMENT                       167
 # define X509V3_F_I2V_AUTHORITY_INFO_ACCESS               138
 # define X509V3_F_NOTICE_SECTION                          132
 # define X509V3_F_NREF_NOS                                133
@@ -47,6 +48,7 @@ int ERR_load_X509V3_strings(void);
 # define X509V3_F_S2I_ASN1_INTEGER                        108
 # define X509V3_F_S2I_ASN1_OCTET_STRING                   112
 # define X509V3_F_S2I_SKEY_ID                             115
+# define X509V3_F_S2I_V3_NS_COMMENT                       168
 # define X509V3_F_SET_DIST_POINT_NAME                     158
 # define X509V3_F_SXNET_ADD_ID_ASC                        125
 # define X509V3_F_SXNET_ADD_ID_INTEGER                    126
@@ -91,6 +93,7 @@ int ERR_load_X509V3_strings(void);
 # define X509V3_R_BAD_OBJECT                              119
 # define X509V3_R_BN_DEC2BN_ERROR                         100
 # define X509V3_R_BN_TO_ASN1_INTEGER_ERROR                101
+# define X509V3_R_DEPRECATED_EXTENSION                    158
 # define X509V3_R_DIRNAME_ERROR                           149
 # define X509V3_R_DISTPOINT_ALREADY_SET                   160
 # define X509V3_R_DUPLICATE_ZONE_ID                       133

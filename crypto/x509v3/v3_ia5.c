@@ -14,16 +14,35 @@
 #include <openssl/x509v3.h>
 #include "ext_dat.h"
 
+static char *i2s_v3_ns_comment(X509V3_EXT_METHOD *method, ASN1_IA5STRING *ia5)
+{
+    char *ret = i2s_ASN1_IA5STRING(method, ia5);
+
+    if (ret != NULL) 
+        X509V3err(X509V3_F_I2S_V3_NS_COMMENT, X509V3_R_DEPRECATED_EXTENSION);
+    return ret;
+}
+
+static ASN1_IA5STRING *s2i_v3_ns_comment(X509V3_EXT_METHOD *method,
+                                         X509V3_CTX *ctx, const char *str)
+{
+    ASN1_IA5STRING *ret = s2i_ASN1_IA5STRING(method, ctx, str);
+
+    if (ret) 
+        X509V3err(X509V3_F_S2I_V3_NS_COMMENT, X509V3_R_DEPRECATED_EXTENSION);
+    return ret;
+}
+
 /*
- * TODO(1.2.0): clean and sweep config files reference to nsComment
- * so #v3_ns_comment can be removed
+ * TODO(1.2.0): sweep all references to nsComment from config files 
+ * so this #v3_ns_comment can be removed
  */
 const X509V3_EXT_METHOD v3_ns_comment = {
     NID_netscape_comment, 0, ASN1_ITEM_ref(ASN1_IA5STRING),
     0, 0,
     0, 0,
-    (X509V3_EXT_I2S) i2s_ASN1_IA5STRING,
-    (X509V3_EXT_S2I) s2i_ASN1_IA5STRING,
+    (X509V3_EXT_I2S) i2s_v3_ns_comment,
+    (X509V3_EXT_S2I) s2i_v3_ns_comment,
     0, 0, 0, 0,
     NULL
 };
