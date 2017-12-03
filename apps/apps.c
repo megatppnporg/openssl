@@ -2683,8 +2683,8 @@ int has_stdin_waiting(void)
 /* Corrupt a signature by modifying final byte */
 void corrupt_signature(const ASN1_STRING *signature)
 {
-        unsigned char *s = signature->data;
-        s[signature->length - 1] ^= 0x1;
+    unsigned char *s = signature->data;
+    s[signature->length - 1] ^= 0x1;
 }
 
 int set_cert_times(X509 *x, const char *startdate, const char *enddate,

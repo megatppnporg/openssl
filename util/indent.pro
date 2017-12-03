@@ -636,3 +636,4 @@
 -T ossl_intmax_t
 -T ossl_uintmax_t
 -T ossl_uintmax_t
+-T SUBJECT
