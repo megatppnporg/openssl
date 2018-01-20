@@ -518,11 +518,11 @@ int MAIN(int argc, char **argv)
         BIO_printf(bio_err,
                    "-reqout file         write DER encoded OCSP request to \"file\"\n");
         BIO_printf(bio_err,
-                   "-respout file        write DER encoded OCSP reponse to \"file\"\n");
+                   "-respout file        write DER encoded OCSP response to \"file\"\n");
         BIO_printf(bio_err,
                    "-reqin file          read DER encoded OCSP request from \"file\"\n");
         BIO_printf(bio_err,
-                   "-respin file         read DER encoded OCSP reponse from \"file\"\n");
+                   "-respin file         read DER encoded OCSP response from \"file\"\n");
         BIO_printf(bio_err,
                    "-nonce               add OCSP nonce to request\n");
         BIO_printf(bio_err,
@@ -578,7 +578,7 @@ int MAIN(int argc, char **argv)
         BIO_printf(bio_err,
                    "-ndays n             number of days before next update\n");
         BIO_printf(bio_err,
-                   "-resp_key_id         identify reponse by signing certificate key ID\n");
+                   "-resp_key_id         identify response by signing certificate key ID\n");
         BIO_printf(bio_err,
                    "-nrequest n          number of requests to accept (default unlimited)\n");
         BIO_printf(bio_err,

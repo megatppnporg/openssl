@@ -220,7 +220,7 @@ OCSP_BASICRESP *OCSP_response_get1_basic(OCSP_RESPONSE *resp)
 }
 
 /*
- * Return number of OCSP_SINGLERESP reponses present in a basic response.
+ * Return number of OCSP_SINGLERESP responses present in a basic response.
  */
 
 int OCSP_resp_count(OCSP_BASICRESP *bs)
